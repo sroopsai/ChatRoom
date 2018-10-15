@@ -25,15 +25,14 @@ list_clients_perm_dict = {}
 def broadcast(msg,conn):
 	for sock in list_clients_perm:
 		print('going to broadcasting')
-		if conn!=sock:
-			try:
+		try:
 				#print('broadcasting')
-				sock.sendall(msg)
-			except:
-				sock.close()
-				list_clients_perm.remove(sock)
-				del list_clients_perm_dict[sock]
-				list_clients.remove(sock)
+			sock.sendall(msg)
+		except:
+			sock.close()
+			list_clients_perm.remove(sock)
+			del list_clients_perm_dict[sock]
+			list_clients.remove(sock)
 while 1:
 	readsock,writesock,errorsock = select.select(list_clients,[],[])
 	for sock in readsock:
