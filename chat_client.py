@@ -2,15 +2,32 @@ import socket
 import select
 import sys
 
+import re
+
 server = socket.socket()
 
-if len(sys.argv) != 2:
-    print "Correct usage: script, IP address, port number"
+if len(sys.argv) != 3:
+    print "Correct usage: script, IP address, port number, NICKNAME"
     sys.exit(1)
 args = str(sys.argv[1]).split(':')
 host = str(args[0])
 port = int(args[1])
+nick = str(sys.argv[2])
 server.connect((host, port))
+hello = server.recv(1024).decode('ascii')
+server.sendall('NICK '+nick.encode('ascii'))
+ok = server.recv(1024).decode('ascii')
+while not re.search(r'Welcome to chat room\s\w*',ok):
+	print(ok)
+	nick = input('Enter your name: ')
+	try:
+		server.sendall('NICK '+nick.encode('ascii'))
+		ok = server.recv(1024).decode('ascii')
+	except:
+		continue
+print(ok)
+
+
 
 while True:
     sockets = [sys.stdin, server]
@@ -24,7 +41,7 @@ while True:
             if message == '\n':
                 continue
             else:
-                server.sendall(message.encode('ascii'))
+                server.sendall('MSG '+message.encode('ascii'))
             
             
 server.close()

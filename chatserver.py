@@ -38,7 +38,7 @@ while 1:
 	for sock in readsock:
 		if sock==server:
 			newsock,addr = server.accept()
-			newsock.sendall('HELLO 1'.encode('ascii'))
+			newsock.sendall('Hello 1'.encode('ascii'))
 		#	print(addr[0])
 		#	print(readsock)
 			list_clients.append(newsock)
@@ -56,7 +56,7 @@ while 1:
 						sock.sendall('Error special characters in your nick name are not allowed'.encode('ascii'))
 					elif found:
 						
-						sock.sendall('OK'.encode('ascii'))
+						sock.sendall('Welcome to chat room '+str(name).encode('ascii'))
 						list_clients_perm.append(sock)
 						list_clients_perm_dict[sock] = name
 					#	print(list_clients_perm_dict[sock])
