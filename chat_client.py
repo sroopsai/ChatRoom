@@ -17,7 +17,7 @@ server.connect((host, port))
 hello = server.recv(1024).decode('ascii')
 server.sendall('NICK '+nick.encode('ascii'))
 ok = server.recv(1024).decode('ascii')
-while not re.search(r'Welcome to chat room\s\w*',ok):
+'''while not re.search(r'Welcome to chat room\s\w*',ok):
 	print(ok)
 	sys.stdout.write('Enter your name:');
 	nick = sys.stdin.readline()
@@ -26,6 +26,7 @@ while not re.search(r'Welcome to chat room\s\w*',ok):
 		ok = server.recv(1024).decode('ascii')
 	except:
 		continue
+'''
 print(ok)
 
 
