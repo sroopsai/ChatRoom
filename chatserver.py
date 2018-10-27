@@ -47,13 +47,14 @@ while 1:
 			try:
 				nick = sock.recv(2048).decode('ascii')
 				if nick:
-					found = re.search(r'NICK\s(\w+)',nick)
+					found = re.search(r'NICK\s(\S*)',nick)
 					#print(found)
 					name = str(found.group(1))
+					
 					if len(name)>12:
 						sock.sendall('Error your nick name length should be less than 13 characters'.encode('ascii'))
-					elif not re.match('^[A-Za-z0-9_]*$',name):
-						sock.sendall('Error special characters in your nick name are not allowed'.encode('ascii'))
+					elif re.search(r'!',name) or re.search(r'@',name) or re.search(r'#',name) or re.search(r'\$',name) or re.search(r'%',name) or re.search(r'\^',name) or re.search(r'\*',name):
+						sock.sendall('Error don\'t use special characters'.encode('ascii'))
 					elif found:
 						
 						sock.sendall('Welcome to chat room '+str(name).encode('ascii'))
