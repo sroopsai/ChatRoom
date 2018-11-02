@@ -23,16 +23,19 @@ list_clients_temp = []
 list_clients_perm = []
 list_clients_perm_dict = {}
 def broadcast(msg,conn):
-	for sock in list_clients_perm:
-		print('going to broadcasting')
-		try:
+        
+
+        for sock in list_clients_perm:
+                if sock!=conn:
+                       print('going to broadcasting')
+	               try:
 				#print('broadcasting')
-			sock.sendall(msg)
-		except:
-			sock.close()
-			list_clients_perm.remove(sock)
-			del list_clients_perm_dict[sock]
-			list_clients.remove(sock)
+	                       sock.sendall(msg)
+	               except:
+		               sock.close()
+			       list_clients_perm.remove(sock)
+			       del list_clients_perm_dict[sock]
+			       list_clients.remove(sock)
 while 1:
 	readsock,writesock,errorsock = select.select(list_clients,[],[])
 	for sock in readsock:
@@ -78,11 +81,14 @@ while 1:
 				msg = sock.recv(2048).decode('ascii')
 				if msg:
 					found = re.search(r'MSG\s',msg)
+                                        
 					if len(msg)>259:
 						sock.sendall('ERROR LENGTH OF THE MSG EXCEEDED->LIMIT:255 CHARACTERS')
 					elif found:
-						msg_to_send = str(list_clients_perm_dict[sock])+' '+str(msg[4:])
-						broadcast(msg_to_send,sock)
+                                            msg_to_send = 'MSG '+str(list_clients_perm_dict[sock])+': '+str(msg[4:])
+					    broadcast(msg_to_send,sock)
+
+
 
 					else:
 						sock.sendall('ERROR BAD COMMAND->ACTUAL COMMAND:MSG <msg>'.encode('ascii'))

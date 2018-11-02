@@ -33,7 +33,7 @@ while not re.search(r'Welcome to chat roo):
 		continue
 '''
 
-if re.search('Error',ok):
+if re.search('Error',ok) or re.search('ERROR',ok):
     print(ok)
     sys.exit()
 
@@ -46,7 +46,11 @@ while True:
     for sock in read_sockets:
         if sock == server:
             message = sock.recv(2048).decode('ascii')
-            print message
+            if re.search(r'Error',message) or re.search(r'ERROR',message):
+                print message
+            else:
+                message = message[4:]#stripping the message removing MSG and giving it to print out as per the protocol
+                print message
         else:
             message = sys.stdin.readline()
             if message == '\n':
