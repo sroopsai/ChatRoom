@@ -1,12 +1,29 @@
-'''Code written by S.RoopSai'''
 import socket
 import select
 import sys
 import re
+''' 
+Code authored by Roop Sai S
+This program is client side code which is written following this protocol-->
+                sending connection request
+    client    ------------------------>      server
+              <------------------------
+        sends  Hello 1 (connection established)
+
+                sends NICK <nick>
+    client    ------------------------>      server
+              <------------------------
+            sends Welcome to Chat room <nick>/Error msg
+                sends MSG <msg1>                        sends MSG <msg2>
+    client1   ------------------------>      server   <------------------- client2 
+              if error sends error msg                if error sends error msg
+              <------------------------               ------------------->
+              <------------------------               ------------------->
+            sends MSG <client2-nick>: <msg2>         sends MSG <client1-nick>: <msg1>
+'''
 server = socket.socket()
 if len(sys.argv) != 3:
-    print ("Correct usage: For windows terminals --> py chatclient.py serveripaddr:portnum nickname")
-    print ("For Linux terminals --> python3 chatclient.py serveripaddr:portnum nickname")
+    print ("For Linux terminals --> python chatclient.py serveripaddr:portnum nickname")
     sys.exit(1)
 args = str(sys.argv[1]).split(':')
 host = str(args[0])
@@ -39,8 +56,3 @@ while True:
             else:
                 server.sendall(('MSG '+message).encode('ascii'))
 server.close()
-
-            
-            
-
-
