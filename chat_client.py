@@ -1,5 +1,4 @@
 '''Code written by S.RoopSai'''
-
 import socket
 import select
 import sys
@@ -7,7 +6,7 @@ import re
 server = socket.socket()
 if len(sys.argv) != 3:
     print ("Correct usage: For windows terminals --> py chatclient.py serveripaddr:portnum nickname")
-    print ("For Linux terminals --> python chatclient.py serveripaddr:portnum nickname")
+    print ("For Linux terminals --> python3 chatclient.py serveripaddr:portnum nickname")
     sys.exit(1)
 args = str(sys.argv[1]).split(':')
 host = str(args[0])
@@ -15,6 +14,7 @@ port = int(args[1])
 nick = str(sys.argv[2])
 server.connect((host, port))
 hello = server.recv(1024).decode('ascii')
+print(hello)
 server.sendall(('NICK '+nick).encode('ascii'))
 ok = server.recv(1024).decode('ascii')
 if re.search('Error',ok) or re.search('ERROR',ok):
@@ -37,8 +37,10 @@ while True:
             if message == '\n':
                 continue
             else:
-                server.sendall('MSG '+message.encode('ascii'))
+                server.sendall(('MSG '+message).encode('ascii'))
 server.close()
 
             
             
+
+
