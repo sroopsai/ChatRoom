@@ -22,10 +22,11 @@ list_clients_perm_dict={}
 def broadcast(msg,conn):
     for sock in list_clients_perm:
         if sock!=conn:
-            print('going to broadcast')
             try:
-                sock.sendall(msg)
+                sock.sendall(msg.encode('ascii'))
             except:
+                print('connection broken')
+            
                 sock.close()
                 list_clients_perm.remove(sock)
                 del list_clients_perm_dict[sock]
@@ -40,6 +41,7 @@ def main():
                 newsock.sendall('Hello 1'.encode('ascii'))
                 list_clients.append(newsock)
                 list_clients_temp.append(newsock)
+
             elif sock in list_clients_temp:
                 try:
                     nick=sock.recv(1024).decode('ascii')
@@ -51,9 +53,11 @@ def main():
                         elif re.search(r'!',name) or re.search(r'@',name) or re.search(r'#',name) or re.search(r'\$',name) or re.search(r'%',name) or re.search(r'\*',name) or re.search(r'\^',name):
                             sock.sendall('Error don\'t use special characters in your nick names'.encode('ascii'))
                         elif found:
-                            sock.sendall('Welcome to chat room '+str(name).encode('ascii'))
+                            sock.sendall(('Welcome to chat room '+str(name)).encode('ascii'))
                             list_clients_perm.append(sock)
+                            
                             list_clients_perm_dict[sock]=name
+                            print(list_clients_perm_dict)
                             list_clients_temp.remove(sock)
                         else:
                             sock.sendall('Error -> BAD COMMAND ACTUAL COMMAND PROTOCOL NICK <nick>'.encode('ascii'))
@@ -72,6 +76,8 @@ def main():
                             sock.sendall('Error message length should not exceed 256 characters'.encode('ascii'))
                         elif found:
                             msg_to_send='MSG '+str(list_clients_perm_dict[sock])+': '+msg[4:]
+                            print(msg_to_send)
+                            print(sock)
                             broadcast(msg_to_send,sock)
                         else:
                             sock.sendall('Error BAD COMMAND ACTUAL COMMAND MSG <msg>'.encode('ascii'))
@@ -86,5 +92,4 @@ def main():
 if __name__ == "__main__":
     main()
     
-
 
