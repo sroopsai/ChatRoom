@@ -2,15 +2,37 @@ import socket
 import sys
 import re
 import select
+#select module doesn't work in windows environment but will work in cygwin terminal 
+#this program  works in linux terminals 
+''' 
+Code authored by Roop Sai S
+This program is server side code which is written following this protocol-->
+                sending connection request
+    client    ------------------------>      server
+              <------------------------
+        sends  Hello 1 (connection established)/Connection failed msg
+
+                sends NICK <nick>
+    client    ------------------------>      server
+              <------------------------
+            sends Welcome to Chat room <nick>/Error msg
+                sends MSG <msg1>                        sends MSG <msg2>
+    client1   ------------------------>      server   <------------------- client2 
+              if error sends error msg                if error sends error msg
+              <------------------------               ------------------->
+              <------------------------               ------------------->
+            sends MSG <client2-nick>: <msg2>         sends MSG <client1-nick>: <msg1>
+'''
 server = socket.socket()
 server.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 if (len(sys.argv)!=2):
-    print("Correct Usage -> py chatserver.py serv_addr:port_num")
+    print("Correct Usage for linux terminals-> python3 chatserver.py serv_addr:port_num")
+    
 args = str(sys.argv[1]).split(':')
 host = str(args[0])
-print(args[0])
+
 port = int(args[1])
-print((args[1]))
+
 server.bind((host,port))
 server.listen(100)
 list_clients=[]
