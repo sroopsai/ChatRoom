@@ -1,5 +1,5 @@
 ## CommandLineChatSystem
-========================
+
 ##### Steps to install and use the application
 
 1. Clone the repo into your system from github using the command 
