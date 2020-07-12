@@ -1,4 +1,4 @@
-## CommandLineChatSystem
+### Chat Room
 
 ##### Steps to install and use the application
 
