@@ -6,8 +6,6 @@ name: Python package
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
@@ -24,7 +22,7 @@ jobs:
       with:
         status: ${{ job.status }}
         notification_title: '{workflow} has {status_message}'
-        message_format: '{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>'
+        message_format: '{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}> {commit_url}'
         footer: 'Linked Repo <{repo_url}|{repo}>'
         notify_when: 'failure, success'
       env:
