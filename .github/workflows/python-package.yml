@@ -20,7 +20,7 @@ jobs:
     steps:        
     - name: Notify Slack
       uses: ravsamhq/notify-slack-action@v1
-      if: always()
+      if: ${{ github.event.pull_request.merged }} == true
       with:
         status: ${{ job.status }}
         notification_title: '{workflow} has {status_message}'
