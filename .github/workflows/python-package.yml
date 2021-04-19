@@ -10,22 +10,13 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  slackNotification:
+    name: slackNotification
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9]
-
-    steps:        
-    - name: Notify Slack
-      uses: ravsamhq/notify-slack-action@v1
-      if: ${{ github.event.pull_request.merged }} == true
-      with:
-        status: ${{ job.status }}
-        notification_title: '{workflow} has {status_message}'
-        message_format: '${{ github.event.head_commit.message }}'
-        footer: 'Linked Repo <{repo_url}|{repo}>'
-        notify_when: 'failure, success'
+    if: $ {{ github.event.pull_request.merged }} == true
+    steps:
+    - uses: actions/checkout@v2
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL}}
