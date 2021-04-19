@@ -20,11 +20,12 @@ jobs:
     steps:        
     - name: Notify Slack
       uses: ravsamhq/notify-slack-action@v1
-      if: always()
+      if: github.event.pull_request.merged
       with:
         status: ${{ job.status }}
         notification_title: '{workflow} has {status_message}'
         message_format: '${{ github.event.head_commit.message }}'
+
         footer: 'Linked Repo <{repo_url}|{repo}>'
         notify_when: 'failure, success'
       env:
